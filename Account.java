@@ -2,6 +2,7 @@ package com.company;
 
 public abstract class Account {
 
+    public Object applyInterest;
     //account number
     private int accountNumber;
 
@@ -49,4 +50,5 @@ public abstract class Account {
     public abstract void withdraw(double amount);
 
 
+    public abstract void applyInterest();
 }

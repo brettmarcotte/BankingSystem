@@ -9,6 +9,27 @@ public class AccountDriver {
 
         //Create array of accounts
         Account account [] = new Account[10];
+        int numAccounts = 0;
+
+        int choice;
+
+        do {
+            choice = menu(keyoard);
+            System.out.println();
+
+            if (choice == 1) {
+                account[numAccounts++] = createAccount(keyoard);
+            } else if(choice == 2) {
+                doDeposit(account, numAccounts, keyoard);
+            } else if (choice == 3) {
+                doWithdraw(account, numAccounts, keyoard);
+            } else if (choice == 4) {
+                applyInterest(account, numAccounts, keyoard);
+            }
+            System.out.println();
+
+        } while(choice != 5);
+
     }
 
     /**
@@ -31,10 +52,13 @@ public class AccountDriver {
         return choice;
     }
 
-    public int searchAccount(Account account [], int count, int accountNumber) {
+    public static int searchAccount(Account account [], int count, int accountNumber) {
         for (int i = 0; i < count ; i++) {
-
+            if(account[i].getAccountNumber() == accountNumber){
+                return i;
+            }
         }
+        return -1;
     }
 
     /**
@@ -42,15 +66,70 @@ public class AccountDriver {
      * Function to perform deposit on a selected account
      */
 
-    public void doDeposit(Account account [], int count, Scanner keyboard){
+    public static void doDeposit(Account account [], int count, Scanner keyboard){
 
         //Get the account number
         System.out.print("\nPlease enter account number: ");
         int accountNumber = keyboard.nextInt();
 
         //search for account
-        int index = searchAccount(accounts, accountNumber);
+        int index = searchAccount(account, count, accountNumber);
 
+        if(index >= 0) {
+            //search for amount
+            System.out.println("Please enter deposit amount: ");
+            double amount = keyboard.nextDouble();
+
+            account[index].deposit(amount);
+        } else {
+            System.out.println("No account exist with AccountNumber: " + accountNumber);
+        }
+    }
+
+    public static void doWithdraw(Account account [], int count, Scanner keyboard){
+        //Get the account number
+        System.out.print("\nPlease enter account number: ");
+        int accountNumber = keyboard.nextInt();
+
+        //search for account
+        int index = searchAccount(account, count, accountNumber);
+
+        if(index >= 0) {
+            //search for amount
+            System.out.println("Please enter deposit amount: ");
+            double amount = keyboard.nextDouble();
+
+            account[index].withdraw(amount);
+        } else {
+            System.out.println("No account exist with AccountNumber: " + accountNumber);
+        }
+    }
+
+    public static void applyInterest(Account account [], int count, Scanner keyboard) {
+        //Get the account number
+        System.out.print("\nPlease enter account number: ");
+        int accountNumber = keyboard.nextInt();
+
+        //search for account
+        int index = searchAccount(account, count, accountNumber);
+
+        if(index >= 0) {
+
+            //must be instance of savings account
+            if (account[index] instanceof SavingsAccount) {
+                ((SavingsAccount) account[index]).applyInterest();
+            }
+        } else {
+            System.out.println("No account exist with AccountNumber: " + accountNumber);
+            }
+        }
+    }
+
+    private static void doDeposit(Account[] account, int numAccounts, Scanner keyoard) {
+    }
+
+    private static int searchAccount(Account[] account, int accountNumber) {
+            return 0;
     }
 
 
@@ -90,12 +169,13 @@ public class AccountDriver {
      * @return choice
      */
 
-    public int menu(Scanner keyboard) {
+    public static int menu(Scanner keyboard) {
         System.out.println("Bank Account Menu");
         System.out.println("1. Create New Account");
         System.out.println("2. Deposit funds");
         System.out.println("3. Withdraw Funds");
-        System.out.println("4. Quit");
+        System.out.println("4. Apply Interest");
+        System.out.println("5. Quit");
 
         int choice;
 
